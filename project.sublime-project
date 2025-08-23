@@ -1,0 +1,16 @@
+{
+	"folders":
+	[
+		{
+			"path": "."
+		}
+	],
+	"build_systems": [
+        {
+            "name": "Build",
+            "cmd": ["cmd", "/c", "build.bat"],
+            "working_dir": "${project_path}",
+            "shell": true
+        }
+    ]
+}

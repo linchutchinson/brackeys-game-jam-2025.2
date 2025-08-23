@@ -1,0 +1,5 @@
+out/
+*.sublime-workspace
+
+odin-linux/
+odin-windows/
