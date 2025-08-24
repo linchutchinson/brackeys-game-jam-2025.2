@@ -6,11 +6,23 @@
 		}
 	],
 	"build_systems": [
-        {
-            "name": "Build",
-            "cmd": ["cmd", "/c", "build.bat"],
+		{
+            "name": "BuildAll",
+            "cmd": ["cmd", "/c", "build.bat core hot"],
             "working_dir": "${project_path}",
             "shell": true
-        }
+        },
+        {
+            "name": "BuildCore",
+            "cmd": ["cmd", "/c", "build.bat core"],
+            "working_dir": "${project_path}",
+            "shell": true
+        },
+        {
+            "name": "BuildHot",
+            "cmd": ["cmd", "/c", "build.bat hot"],
+            "working_dir": "${project_path}",
+            "shell": true
+        },
     ]
 }
