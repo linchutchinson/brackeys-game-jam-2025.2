@@ -8,6 +8,6 @@ for %%a in (%*) do set "%%a=1"
 
 set odin=odin-windows\odin.exe
 
-set flags=-debug -out:out/bgj.exe -strict-style -vet -subsystem:windows
+set flags=-debug -out:out/bgj.exe -strict-style -vet
 
 %odin% build src %flags%
