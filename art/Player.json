@@ -235,24 +235,6 @@
    },
    {
     "filename": "Player 26.aseprite",
-    "frame": { "x": 512, "y": 768, "w": 128, "h": 128 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 128 },
-    "sourceSize": { "w": 128, "h": 128 },
-    "duration": 83
-   },
-   {
-    "filename": "Player 27.aseprite",
-    "frame": { "x": 512, "y": 768, "w": 128, "h": 128 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 128 },
-    "sourceSize": { "w": 128, "h": 128 },
-    "duration": 83
-   },
-   {
-    "filename": "Player 28.aseprite",
     "frame": { "x": 768, "y": 128, "w": 128, "h": 128 },
     "rotated": false,
     "trimmed": false,
@@ -261,7 +243,7 @@
     "duration": 83
    },
    {
-    "filename": "Player 29.aseprite",
+    "filename": "Player 27.aseprite",
     "frame": { "x": 128, "y": 0, "w": 128, "h": 128 },
     "rotated": false,
     "trimmed": false,
@@ -270,7 +252,7 @@
     "duration": 83
    },
    {
-    "filename": "Player 30.aseprite",
+    "filename": "Player 28.aseprite",
     "frame": { "x": 256, "y": 0, "w": 128, "h": 128 },
     "rotated": false,
     "trimmed": false,
@@ -279,7 +261,7 @@
     "duration": 83
    },
    {
-    "filename": "Player 31.aseprite",
+    "filename": "Player 29.aseprite",
     "frame": { "x": 384, "y": 0, "w": 128, "h": 128 },
     "rotated": false,
     "trimmed": false,
@@ -288,26 +270,8 @@
     "duration": 83
    },
    {
-    "filename": "Player 32.aseprite",
+    "filename": "Player 30.aseprite",
     "frame": { "x": 512, "y": 0, "w": 128, "h": 128 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 128 },
-    "sourceSize": { "w": 128, "h": 128 },
-    "duration": 83
-   },
-   {
-    "filename": "Player 33.aseprite",
-    "frame": { "x": 512, "y": 768, "w": 128, "h": 128 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 128 },
-    "sourceSize": { "w": 128, "h": 128 },
-    "duration": 83
-   },
-   {
-    "filename": "Player 34.aseprite",
-    "frame": { "x": 640, "y": 0, "w": 128, "h": 128 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 128 },
@@ -315,7 +279,16 @@
     "duration": 20
    },
    {
-    "filename": "Player 35.aseprite",
+    "filename": "Player 31.aseprite",
+    "frame": { "x": 640, "y": 0, "w": 128, "h": 128 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 128 },
+    "sourceSize": { "w": 128, "h": 128 },
+    "duration": 40
+   },
+   {
+    "filename": "Player 32.aseprite",
     "frame": { "x": 768, "y": 0, "w": 128, "h": 128 },
     "rotated": false,
     "trimmed": false,
@@ -324,7 +297,7 @@
     "duration": 40
    },
    {
-    "filename": "Player 36.aseprite",
+    "filename": "Player 33.aseprite",
     "frame": { "x": 896, "y": 0, "w": 128, "h": 128 },
     "rotated": false,
     "trimmed": false,
@@ -333,16 +306,16 @@
     "duration": 40
    },
    {
-    "filename": "Player 37.aseprite",
+    "filename": "Player 34.aseprite",
     "frame": { "x": 0, "y": 128, "w": 128, "h": 128 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 128 },
     "sourceSize": { "w": 128, "h": 128 },
-    "duration": 40
+    "duration": 83
    },
    {
-    "filename": "Player 38.aseprite",
+    "filename": "Player 35.aseprite",
     "frame": { "x": 128, "y": 128, "w": 128, "h": 128 },
     "rotated": false,
     "trimmed": false,
@@ -351,7 +324,7 @@
     "duration": 83
    },
    {
-    "filename": "Player 39.aseprite",
+    "filename": "Player 36.aseprite",
     "frame": { "x": 256, "y": 128, "w": 128, "h": 128 },
     "rotated": false,
     "trimmed": false,
@@ -360,7 +333,7 @@
     "duration": 83
    },
    {
-    "filename": "Player 40.aseprite",
+    "filename": "Player 37.aseprite",
     "frame": { "x": 384, "y": 128, "w": 128, "h": 128 },
     "rotated": false,
     "trimmed": false,
@@ -369,7 +342,7 @@
     "duration": 83
    },
    {
-    "filename": "Player 41.aseprite",
+    "filename": "Player 38.aseprite",
     "frame": { "x": 512, "y": 128, "w": 128, "h": 128 },
     "rotated": false,
     "trimmed": false,
@@ -378,7 +351,7 @@
     "duration": 83
    },
    {
-    "filename": "Player 42.aseprite",
+    "filename": "Player 39.aseprite",
     "frame": { "x": 640, "y": 128, "w": 128, "h": 128 },
     "rotated": false,
     "trimmed": false,
@@ -387,7 +360,7 @@
     "duration": 83
    },
    {
-    "filename": "Player 43.aseprite",
+    "filename": "Player 40.aseprite",
     "frame": { "x": 0, "y": 0, "w": 128, "h": 128 },
     "rotated": false,
     "trimmed": false,
@@ -396,7 +369,7 @@
     "duration": 83
    },
    {
-    "filename": "Player 44.aseprite",
+    "filename": "Player 41.aseprite",
     "frame": { "x": 896, "y": 128, "w": 128, "h": 128 },
     "rotated": false,
     "trimmed": false,
@@ -405,7 +378,7 @@
     "duration": 83
    },
    {
-    "filename": "Player 45.aseprite",
+    "filename": "Player 42.aseprite",
     "frame": { "x": 0, "y": 256, "w": 128, "h": 128 },
     "rotated": false,
     "trimmed": false,
@@ -414,26 +387,17 @@
     "duration": 83
    },
    {
-    "filename": "Player 46.aseprite",
+    "filename": "Player 43.aseprite",
+    "frame": { "x": 384, "y": 0, "w": 128, "h": 128 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 128 },
+    "sourceSize": { "w": 128, "h": 128 },
+    "duration": 83
+   },
+   {
+    "filename": "Player 44.aseprite",
     "frame": { "x": 128, "y": 256, "w": 128, "h": 128 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 128 },
-    "sourceSize": { "w": 128, "h": 128 },
-    "duration": 83
-   },
-   {
-    "filename": "Player 47.aseprite",
-    "frame": { "x": 512, "y": 0, "w": 128, "h": 128 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 128 },
-    "sourceSize": { "w": 128, "h": 128 },
-    "duration": 83
-   },
-   {
-    "filename": "Player 48.aseprite",
-    "frame": { "x": 256, "y": 256, "w": 128, "h": 128 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 128 },
@@ -441,7 +405,16 @@
     "duration": 20
    },
    {
-    "filename": "Player 49.aseprite",
+    "filename": "Player 45.aseprite",
+    "frame": { "x": 256, "y": 256, "w": 128, "h": 128 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 128 },
+    "sourceSize": { "w": 128, "h": 128 },
+    "duration": 40
+   },
+   {
+    "filename": "Player 46.aseprite",
     "frame": { "x": 384, "y": 256, "w": 128, "h": 128 },
     "rotated": false,
     "trimmed": false,
@@ -450,7 +423,7 @@
     "duration": 40
    },
    {
-    "filename": "Player 50.aseprite",
+    "filename": "Player 47.aseprite",
     "frame": { "x": 512, "y": 256, "w": 128, "h": 128 },
     "rotated": false,
     "trimmed": false,
@@ -459,16 +432,16 @@
     "duration": 40
    },
    {
-    "filename": "Player 51.aseprite",
+    "filename": "Player 48.aseprite",
     "frame": { "x": 640, "y": 256, "w": 128, "h": 128 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 128 },
     "sourceSize": { "w": 128, "h": 128 },
-    "duration": 40
+    "duration": 83
    },
    {
-    "filename": "Player 52.aseprite",
+    "filename": "Player 49.aseprite",
     "frame": { "x": 768, "y": 256, "w": 128, "h": 128 },
     "rotated": false,
     "trimmed": false,
@@ -477,7 +450,7 @@
     "duration": 83
    },
    {
-    "filename": "Player 53.aseprite",
+    "filename": "Player 50.aseprite",
     "frame": { "x": 896, "y": 256, "w": 128, "h": 128 },
     "rotated": false,
     "trimmed": false,
@@ -486,7 +459,7 @@
     "duration": 83
    },
    {
-    "filename": "Player 54.aseprite",
+    "filename": "Player 51.aseprite",
     "frame": { "x": 0, "y": 384, "w": 128, "h": 128 },
     "rotated": false,
     "trimmed": false,
@@ -495,7 +468,7 @@
     "duration": 83
    },
    {
-    "filename": "Player 55.aseprite",
+    "filename": "Player 52.aseprite",
     "frame": { "x": 128, "y": 384, "w": 128, "h": 128 },
     "rotated": false,
     "trimmed": false,
@@ -504,17 +477,8 @@
     "duration": 83
    },
    {
-    "filename": "Player 56.aseprite",
+    "filename": "Player 53.aseprite",
     "frame": { "x": 256, "y": 384, "w": 128, "h": 128 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 128 },
-    "sourceSize": { "w": 128, "h": 128 },
-    "duration": 83
-   },
-   {
-    "filename": "Player 57.aseprite",
-    "frame": { "x": 512, "y": 768, "w": 128, "h": 128 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 128 },
@@ -525,7 +489,7 @@
  "meta": {
   "app": "http://www.aseprite.org/",
   "version": "1.3.14.4-x64",
-  "image": "player.png",
+  "image": "Player.png",
   "format": "RGBA8888",
   "size": { "w": 1024, "h": 896 },
   "scale": "1",
@@ -535,10 +499,10 @@
    { "name": "Run Right", "from": 7, "to": 12, "direction": "forward", "color": "#000000ff" },
    { "name": "Run Down", "from": 13, "to": 18, "direction": "forward", "color": "#000000ff" },
    { "name": "Run Left", "from": 19, "to": 24, "direction": "forward", "color": "#000000ff" },
-   { "name": "Attack Up", "from": 25, "to": 33, "direction": "forward", "color": "#000000ff" },
-   { "name": "Attack Right", "from": 34, "to": 42, "direction": "forward", "color": "#000000ff" },
-   { "name": "Attack Down", "from": 43, "to": 47, "direction": "forward", "color": "#000000ff" },
-   { "name": "Attack Left", "from": 48, "to": 56, "direction": "forward", "color": "#000000ff" }
+   { "name": "Attack Up", "from": 25, "to": 29, "direction": "forward", "color": "#000000ff" },
+   { "name": "Attack Right", "from": 30, "to": 38, "direction": "forward", "color": "#000000ff" },
+   { "name": "Attack Down", "from": 39, "to": 43, "direction": "forward", "color": "#000000ff" },
+   { "name": "Attack Left", "from": 44, "to": 52, "direction": "forward", "color": "#000000ff" }
   ],
   "layers": [
    { "name": "Shadow", "opacity": 64, "blendMode": "normal" },
