@@ -32,6 +32,19 @@ GameState :: struct {
 	next_animation_frame_idx: int,
 	animations: map[AnimationId]Animation,
 	animation_names: [MAX_ANIMATIONS][MAX_ANIMATION_NAME_LEN]u8,
+
+	enemies_spawned: int,
+
+	map_grid: []MapGridTile,
+
+	alive_entities: int,
+	entity_collision_checks: int,
+}
+
+MapGridTile :: struct {
+	has_entity_frame: int,
+	entity_idx: int,
+	has_player_frame: int,
 }
 
 PlayerState :: enum {
@@ -83,4 +96,23 @@ Animation :: distinct [2]int
 AnimFrame :: struct {
 	sheet_rect: rl.Rectangle,
 	duration_frames: int,
+}
+
+
+EntityFlag :: enum { alive }
+EntityFlags :: bit_set[EntityFlag]
+
+Entity :: struct {
+	flags: EntityFlags,
+	texture: Textures,
+	pos: [2]f32,
+
+	next_entity_in_sector: EntityHandle,
+}
+
+EntityHandle :: distinct Handle
+
+Handle :: struct {
+	idx: int,
+	gen: int,
 }

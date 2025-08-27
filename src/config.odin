@@ -26,9 +26,24 @@ CROSSHAIR_COLOR : rl.Color : rl.RED
 PLAYER_SHADOW_RADIUS :: 4
 
 MAX_ATTACKS :: 1024
-MAX_ENTITIES :: 1024
+MAX_ENTITIES :: 4096
 
 PLAYER_SPEED :: 2
+PLAYER_SPAWN : [2]f32 : { 960, 540 }
+
+MAP_GRID_SIZE :: 16
+MAP_GRID_WIDTH :: 120
+MAP_GRID_HEIGHT :: 68
+
+@(rodata)
+enemy_spawns : [][2]f32 = {
+	{ 200, 480 },
+	{ 1320, 1015 },
+}
+ENEMY_SPEED :: 0.5
+
+ENEMY_MIN_SEPARATION :: 16
+ENEMY_SEPARATION_SEARCH_RANGE :: (ENEMY_MIN_SEPARATION + MAP_GRID_SIZE - 1) / MAP_GRID_SIZE
 
 texture_load_db := #partial [Textures]TextureLoadInfo {
 	.player = {
@@ -38,6 +53,11 @@ texture_load_db := #partial [Textures]TextureLoadInfo {
 		spritesheet_data = #load("player.json"),
 		filetype = ".png",
 		offset = { 64, 64 },
+	},
+	.dungeon = {
+		load_from_data = true,
+		data = #load("dungeon.png"),
+		filetype = ".png",
 	},
 	.beet_root_scythe = {
 		load_from_data = true,
@@ -55,9 +75,9 @@ texture_load_db := #partial [Textures]TextureLoadInfo {
 
 attack_db := #partial [Attacks]AttackData {
 	.player_sword_horizontal = {
-		startup = 20,
+		startup = 15,
 		active = 15,
-		recovery = 10,
+		recovery = 15,
 		
 		rect = { x = 8, y = -32, width = 64, height = 48 },
 	},

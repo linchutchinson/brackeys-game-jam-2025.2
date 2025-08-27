@@ -154,27 +154,9 @@ get_params :: proc() -> (p: Params) {
 		m_s := runtime.map_total_allocation_size(MAX_ANIMATIONS, m_info)
 		anim_map_size = int(m_s)
 	}
-	p.lifetime_arena_size = size_of(Entity) * MAX_ENTITIES + size_of(Attack) * MAX_ATTACKS + size_of(AnimFrame) * MAX_ANIMATION_FRAMES + anim_map_size
+	p.lifetime_arena_size = size_of(Entity) * MAX_ENTITIES + size_of(Attack) * MAX_ATTACKS + size_of(AnimFrame) * MAX_ANIMATION_FRAMES + anim_map_size + 64 + MAP_GRID_WIDTH * MAP_GRID_HEIGHT * size_of(MapGridTile)
 
 	return
-}
-
-EntityFlag :: enum { alive }
-EntityFlags :: bit_set[EntityFlag]
-
-Entity :: struct {
-	flags: EntityFlags,
-	texture: Textures,
-	pos: [2]f32,
-
-	next_entity_in_sector: EntityHandle,
-}
-
-EntityHandle :: distinct Handle
-
-Handle :: struct {
-	idx: int,
-	gen: int,
 }
 
 Textures :: enum {
@@ -183,6 +165,7 @@ Textures :: enum {
 	player,
 	beet_root_scythe,
 	beet_root_sword,
+	dungeon,
 }
 
 TextureLoadInfo :: struct {
@@ -222,6 +205,8 @@ init :: proc(state: ^State) {
 	gs.attacks = make([]Attack, MAX_ATTACKS, allocator=lifetime_arena)
 	gs.animations = make(map[AnimationId]Animation, MAX_ANIMATIONS, allocator=lifetime_arena)
 
+	gs.map_grid = make([]MapGridTile, MAP_GRID_WIDTH * MAP_GRID_HEIGHT, allocator=lifetime_arena)
+
 	for &tex, id in gs.textures {
 		info := texture_load_db[id]
 		if info.load_from_data {
@@ -234,6 +219,8 @@ init :: proc(state: ^State) {
 			load_animation_spritesheet(gs, id)
 		}
 	}
+
+	gs.player_pos = PLAYER_SPAWN
 
 	gs.last_frame_time = time.tick_now()
 }
@@ -265,6 +252,8 @@ update :: proc(state: ^State) {
 		gs.fixed_timer -= FIXED_FRAME_DURATION
 	}
 
+	gs.camera_pos = gs.player_pos
+
 	//rl.UpdateMusicStream(gs.bgm)
 
 	state.should_close = rl.WindowShouldClose()
@@ -273,6 +262,8 @@ update :: proc(state: ^State) {
 
 fixed_update :: proc(state: ^State) {
 	gs := cast(^GameState)raw_data(state.game_state_bytes)
+	gs.fixed_frame += 1
+	
 	if gs.input_dir != {} && gs.player_state != .attack {
 		gs.player_pos += linalg.normalize(gs.input_dir) * PLAYER_SPEED	
 		gs.player_dir = math.atan2(-gs.input_dir.y, gs.input_dir.x)
@@ -309,22 +300,96 @@ fixed_update :: proc(state: ^State) {
 
 	gs.input_dir_old = gs.input_dir
 
+	{
+		tile, _ := get_tile_from_pos(gs, gs.player_pos)
+		tile.has_player_frame = gs.fixed_frame
+	}
+
+	gs.alive_entities = 0
+	gs.entity_collision_checks = 0
+
 	have_spawned: bool
-	for &entity in gs.entities {
+	for &entity, i in gs.entities {
 		if .alive not_in entity.flags {
-			if !have_spawned {
+			if !have_spawned && gs.enemies_spawned < 1024 {
 				entity = {
 					flags = { .alive },
 					texture = .beet_root_sword,
-					pos = gs.player_pos + { rand.float32_range(-64, 64), rand.float32_range(-64, 64) },
+					pos = rand.choice(enemy_spawns),
 				}
 				have_spawned = true
+				gs.enemies_spawned += 1
+				gs.enemies_spawned = 0
+				gs.alive_entities += 1
 			}
 
 			continue
 		}
+		gs.alive_entities += 1
+
+		tile, coord := get_tile_from_pos(gs, entity.pos)
+
+		seek: [2]f32
+		{
+			displacement := gs.player_pos - entity.pos
+			magnitude := math.sqrt(displacement.x * displacement.x + displacement.y * displacement.y)
+			norm: [2]f32
+			if magnitude != 0 do norm = displacement / magnitude
+			seek = norm
+		}
+
+		separate: [2]f32
+		for search_y := coord.y - ENEMY_SEPARATION_SEARCH_RANGE; search_y <= coord.y + ENEMY_SEPARATION_SEARCH_RANGE; search_y += 1 {
+			if search_y < 0 || search_y >= MAP_GRID_HEIGHT do continue
+			for search_x := coord.x - ENEMY_SEPARATION_SEARCH_RANGE; search_x <= coord.x + ENEMY_SEPARATION_SEARCH_RANGE; search_x += 1 {
+				if search_x < 0 || search_x >= MAP_GRID_WIDTH do continue
+				search_tile := get_tile_from_coord(gs, { search_x, search_y })
+				if search_tile.has_entity_frame != gs.fixed_frame do continue
+
+				other := gs.entities[search_tile.entity_idx]
+				for {
+					gs.entity_collision_checks += 1
+
+					displacement := other.pos - entity.pos
+					magnitude := linalg.length(displacement)
+					if magnitude >= ENEMY_MIN_SEPARATION {
+
+					} else if magnitude == 0 {
+						separate += linalg.matrix2_rotate_f32(rand.float32() * math.PI * 2) * [2]f32{ ENEMY_MIN_SEPARATION, 0 }
+					} else {
+						repel := displacement / -magnitude
+						separate += repel * 10
+					}
+
+					if other.next_entity_in_sector.gen != gs.fixed_frame do break
+					other = gs.entities[other.next_entity_in_sector.idx]
+				}
+			}
+		}
 
 
+		vel := linalg.normalize(seek + separate) * ENEMY_SPEED
+		entity.pos += vel
+
+		coord = get_coord_from_pos(entity.pos)
+		if  !is_tile_walkable(coord) {
+			entity.pos -= vel
+		}
+
+		tile, _ = get_tile_from_pos(gs, entity.pos)
+		if tile.has_entity_frame == gs.fixed_frame {
+			other := &gs.entities[tile.entity_idx]
+			for other.next_entity_in_sector.gen == gs.fixed_frame {
+				other = &gs.entities[other.next_entity_in_sector.idx]
+			}
+			other.next_entity_in_sector = {
+				gen = gs.fixed_frame,
+				idx = i,
+			}
+		} else {
+			tile.has_entity_frame = gs.fixed_frame
+			tile.entity_idx = i
+		}
 	}
 
 	spawn_player_sword_strike := gs.input_attack
@@ -371,7 +436,7 @@ fixed_update :: proc(state: ^State) {
 	}
 
 	gs.input_attack = false
-	gs.fixed_frame += 1
+
 }
 
 render :: proc(state: ^State) {
@@ -382,18 +447,7 @@ render :: proc(state: ^State) {
 	defer rl.EndDrawing()
 
 
-	rl.ClearBackground(rl.PINK)
-
-	// Draw Check background
-	{
-		tex := gs.textures[.checkers]
-		offset: [2]f32 = { -math.mod(gs.camera_pos.x, CHECK_TEXTURE_SIZE),  -math.mod(gs.camera_pos.y, CHECK_TEXTURE_SIZE) }
-		for y := offset.y; y < screen_size.y; y += CHECK_TEXTURE_SIZE {
-			for x := offset.x; x < screen_size.x; x += CHECK_TEXTURE_SIZE {
-				rl.DrawTextureV(tex, { x, y }, rl.WHITE)
-			}
-		}
-	}
+	rl.ClearBackground(rl.BLACK)
 
 	{
 		rl.BeginMode2D({
@@ -402,6 +456,21 @@ render :: proc(state: ^State) {
 			zoom = VIEW_SCALE,
 		})
 		defer rl.EndMode2D()
+
+		rl.DrawTexture(gs.textures[.dungeon], 0, 0, rl.WHITE)
+
+		for y := 0; y < MAP_GRID_HEIGHT; y += 1 {
+			y_pos: i32 = i32(y) * MAP_GRID_SIZE
+			for x := 0; x < MAP_GRID_WIDTH; x += 1 {
+				x_pos: i32 = i32(x) * MAP_GRID_SIZE
+
+				if is_tile_walkable({x, y}) {
+					rl.DrawRectangleLines(x_pos, y_pos, MAP_GRID_SIZE, MAP_GRID_SIZE, rl.BLUE)	
+				} else {
+					
+				}
+			}
+		}
 
 		for entity in gs.entities {
 			if .alive not_in entity.flags do continue
@@ -457,7 +526,9 @@ render :: proc(state: ^State) {
 
 	rl.DrawFPS(20, 20)
 
-	debug_txt := fmt.ctprint(gs.player_dir)
+	avg_collision_checks: int
+	if gs.alive_entities > 0 do avg_collision_checks = gs.entity_collision_checks / gs.alive_entities
+	debug_txt := fmt.ctprint(gs.alive_entities, avg_collision_checks, gs.entity_collision_checks)
 	rl.DrawText(debug_txt, 20, 40, 20, rl.RED)
 
 }
@@ -474,6 +545,7 @@ get_player_anim :: proc(#by_ptr gs: GameState) -> Animation {
 		name := "Attack Right"
 		if gs.player_dir == math.PI / 2 do name = "Attack Up"
 		if gs.player_dir == -math.PI / 2 do name = "Attack Down"
+		if gs.player_dir == math.PI do name = "Attack Left"
 		return gs.animations[{ tex = .player, name = name }]
 	}
 	return {}
@@ -544,4 +616,36 @@ load_animation_spritesheet :: proc(gs: ^GameState, tex: Textures) {
 			duration_frames = duration,
 		}
 	}
+}
+
+get_tile_from_pos :: proc(gs: ^GameState, pos: [2]f32) -> (tile: ^MapGridTile, coord: [2]int) {
+	coord.x = int(pos.x) / MAP_GRID_SIZE
+	assert(coord.x < MAP_GRID_WIDTH)
+	coord.y = int(pos.y) / MAP_GRID_SIZE
+	assert(coord.y < MAP_GRID_HEIGHT)
+	idx := coord.y * MAP_GRID_WIDTH + coord.x
+	assert(idx < len(gs.map_grid))
+	tile = &gs.map_grid[coord.y * MAP_GRID_WIDTH + coord.x]
+
+	return
+}
+
+get_tile_from_coord :: proc(gs: ^GameState, coord: [2]int) -> (tile: ^MapGridTile) {
+	assert(coord.x < MAP_GRID_WIDTH)
+	assert(coord.y < MAP_GRID_HEIGHT)
+	idx := coord.y * MAP_GRID_WIDTH + coord.x
+	assert(idx < len(gs.map_grid))
+	tile = &gs.map_grid[coord.y * MAP_GRID_WIDTH + coord.x]
+	return
+}
+
+get_coord_from_pos :: proc(pos: [2]f32) -> (coord: [2]int) {
+	coord.x = int(pos.x) / MAP_GRID_SIZE
+	coord.y = int(pos.y) / MAP_GRID_SIZE
+	return
+}
+
+is_tile_walkable :: proc(coord: [2]int) -> bool {
+	if coord.y < 12 do return false
+	return coord.x >= 0 && coord.x < MAP_GRID_WIDTH && coord.y >= 0 && coord.y < MAP_GRID_HEIGHT
 }
