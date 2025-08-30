@@ -26,7 +26,7 @@ CROSSHAIR_COLOR : rl.Color : rl.RED
 PLAYER_SHADOW_RADIUS :: 4
 
 MAX_ATTACKS :: 1024
-MAX_ENTITIES :: 4096
+MAX_ENTITIES :: 512
 
 PLAYER_SPEED :: 2
 PLAYER_SPAWN : [2]f32 : { 960, 540 }
@@ -38,7 +38,7 @@ MAP_GRID_HEIGHT :: 68
 @(rodata)
 enemy_spawns : [][2]f32 = {
 	{ 200, 480 },
-	{ 1320, 1015 },
+	{ 1320, 1000 },
 }
 ENEMY_SPEED :: 0.5
 

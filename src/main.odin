@@ -13,6 +13,9 @@ import os "core:os/os2"
 import "core:time"
 
 import rl "vendor:raylib"
+import mui "vendor:microui"
+
+_ :: dynlib.Library
 
 State :: struct {
 	should_close: bool,
@@ -222,6 +225,10 @@ init :: proc(state: ^State) {
 
 	gs.player_pos = PLAYER_SPAWN
 
+    mui.init(&gs.ui_ctx)
+    gs.ui_ctx.text_width = mui_text_width
+    gs.ui_ctx.text_height = mui_text_height
+
 	gs.last_frame_time = time.tick_now()
 }
 
@@ -247,6 +254,14 @@ update :: proc(state: ^State) {
 
 	if rl.IsKeyPressed(.SPACE) do gs.input_attack = true
 
+    {
+        mouse_pos := [2]i32{ rl.GetMouseX(), rl.GetMouseY() }
+        mui.input_mouse_move(&gs.ui_ctx, mouse_pos.x, mouse_pos.y)
+        if rl.IsMouseButtonPressed(.LEFT) do mui.input_mouse_down(&gs.ui_ctx, mouse_pos.x, mouse_pos.y, .LEFT)
+        if rl.IsMouseButtonReleased(.LEFT) do mui.input_mouse_up(&gs.ui_ctx, mouse_pos.x, mouse_pos.y, .LEFT)
+    }
+    mui.begin(&gs.ui_ctx)
+
 	for gs.fixed_timer >= FIXED_FRAME_DURATION {
 		fixed_update(state)
 		gs.fixed_timer -= FIXED_FRAME_DURATION
@@ -254,8 +269,13 @@ update :: proc(state: ^State) {
 
 	gs.camera_pos = gs.player_pos
 
+    mui.begin_window(&gs.ui_ctx, "My Window", { 32, 32, 128, 128 }, {})
+    mui.button(&gs.ui_ctx, "Hello")
+    mui.end_window(&gs.ui_ctx)
+
 	//rl.UpdateMusicStream(gs.bgm)
 
+    mui.end(&gs.ui_ctx)
 	state.should_close = rl.WindowShouldClose()
 	gs.fixed_timer += time.tick_lap_time(&gs.last_frame_time)
 }
@@ -523,6 +543,20 @@ render :: proc(state: ^State) {
 
 	}
 
+    {
+        cmd: ^mui.Command
+        for mui.next_command(&gs.ui_ctx, &cmd) {
+            switch v in cmd.variant {
+            case ^mui.Command_Jump:
+            case ^mui.Command_Clip:
+            case ^mui.Command_Rect:
+                rl.DrawRectangle(v.rect.x, v.rect.y, v.rect.w, v.rect.h, transmute(rl.Color)v.color)
+            case ^mui.Command_Text:
+            case ^mui.Command_Icon:
+            }
+        }
+    }
+
 
 	rl.DrawFPS(20, 20)
 
@@ -647,5 +681,20 @@ get_coord_from_pos :: proc(pos: [2]f32) -> (coord: [2]int) {
 
 is_tile_walkable :: proc(coord: [2]int) -> bool {
 	if coord.y < 12 do return false
+    if coord.y > 62 do return false
+    if coord.x < 10 do return false
+
+    if coord.x < 80 && coord.y > 50 do return false
+
+    if coord.x > 13 && coord.x < 25 && coord.y < 33 do return false
 	return coord.x >= 0 && coord.x < MAP_GRID_WIDTH && coord.y >= 0 && coord.y < MAP_GRID_HEIGHT
+}
+
+mui_text_width :: proc(font: mui.Font, str: string) -> i32 {
+    cstr := fmt.ctprint(str)
+    return rl.MeasureText(cstr, 20)
+}
+
+mui_text_height :: proc(font: mui.Font) -> i32 {
+    return 20
 }

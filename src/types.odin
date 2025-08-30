@@ -3,6 +3,7 @@ package main
 import "core:time"
 
 import rl "vendor:raylib"
+import "vendor:microui"
 
 GameState :: struct {
 	bgm: rl.Music,
@@ -39,6 +40,8 @@ GameState :: struct {
 
 	alive_entities: int,
 	entity_collision_checks: int,
+
+    ui_ctx: microui.Context,
 }
 
 MapGridTile :: struct {
